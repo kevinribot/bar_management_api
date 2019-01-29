@@ -96,6 +96,12 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'bars.pagination.StandardResultsSetPagination',
 }
 
+
+# Ajout des fixture
+FIXTURE_DIRS = (
+   os.path.join(BASE_DIR, 'bars/fixtures/'),
+)
+
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
