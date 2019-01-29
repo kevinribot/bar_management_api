@@ -9,17 +9,35 @@ from django.db.models import Sum, Count
 
 
 class ReferenceList(generics.ListCreateAPIView):
+    """
+    get:
+    Retourne la liste des références.
+    
+    post:
+    Permet d'ajouter une référence.
+    """
     queryset = Reference.objects.all()
     serializer_class = ReferenceSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
 
 
 class BarList(generics.ListCreateAPIView):
+    """
+    get:
+    Retourne la liste des compteoirs.
+    
+    post:
+    Permet d'ajouter un comptoir.
+    """
     queryset = Bar.objects.all()
     serializer_class = BarSerializer
 
 
 class StockList(generics.ListAPIView):
+    """
+    get:
+    Retourne la liste des stocks.
+    """
     serializer_class = StockSerializer
 
     def get_queryset(self):
@@ -27,6 +45,11 @@ class StockList(generics.ListAPIView):
 
 
 class MenuList(generics.ListAPIView):
+    """
+    get:
+    Retourne la liste des stocks pour chaque référence.
+    Si le comptoir est précisé alors la liste ce limitera à celui-ci.
+    """
     queryset = Reference.objects.all()
     serializer_class = MenuSerializer
 
@@ -42,24 +65,32 @@ class MenuList(generics.ListAPIView):
 
 
 class OrderList(generics.ListAPIView):
+    """
+    get:
+    Retourne la liste des commandes.
+    """
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
 
 class OrderCreate(generics.CreateAPIView):
+    """
+    post:
+    Permet de passer une commande à un comptoir.
+    """
     serializer_class = OrderCreateSerializer
 
     def create(self, validated_data, bar):
         dict_items = dict(self.request.data)
-        cust_req_data_order = {'bar': bar}
 
         # Enregistrement de la commandes
+        cust_req_data_order = {'bar': bar}
+        
         order_serializer = OrderSerializer(data=cust_req_data_order)
         if order_serializer.is_valid():
             order_serializer.save()
 
-        response = {"pk": order_serializer.data.get("id")}
-
+        # Récupération de la liste des références
         lict_items = list()
         for itemRef in list(dict_items.get("items")):
             # Récupération de la référence
@@ -90,51 +121,60 @@ class OrderCreate(generics.CreateAPIView):
                         if orderitem_serializer.is_valid():
                             orderitem_serializer.save()
                     else:
-                        # La bière n'existe pas
+                        # La bière n'est plus en stock
                         lict_items.append({"ref": itemRef.get("ref"), "description": "La bière n'est plus disponible."})
                 else:
-                    # La bière n'existe pas
+                    # "La bière n'est pas disponible à ce comptoire
                     lict_items.append({"ref": itemRef.get("ref"), "description": "La bière n'est pas disponible à ce comptoire."})
             else:
                 # La bière n'existe pas
                 lict_items.append({"ref": itemRef.get("ref"), "description": "La référence demandée n'existe pas."})
-
+        
+        # Création de la response
+        response = {"pk": order_serializer.data.get("id")}
         response['items'] = lict_items
 
         return Response(response)
 
 
 class OrderDetail(generics.RetrieveAPIView):
+    """
+    get:
+    Retourne la commande correspondant à l'identifiant précisé.
+    """
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
 
 class RankList(generics.ListAPIView):
+    """
+    get:
+    Retourne le classement des comptoires si la personne est authtifié.
+    """
     serializer_class = RankSerializer
 
     def get_queryset(self):
-        # Note the use of `get_queryset()` instead of `self.queryset`
         response = list()
 
-        # Commentaire
+        # Recovery of the list of bars that have all the references in stock
         bars_all = Bar.objects.exclude(stocks__stock=0).distinct()
         response_all = {'name': 'all_stocks',
                         'description': 'Liste des comptoirs qui ont toutes les références en stock.',
                         'bars': (bar.pk for bar in bars_all)}
 
-        # Commentaire
+        # Recovery of the list of bars that at least one exhausted references
         bars_miss = Bar.objects.filter(stocks__stock=0).distinct()
         response_miss = {'name': 'miss_at_least_one',
                          'description': 'Liste des comptoirs qui au moins une références éppuisée.',
                          'bars': (bar.pk for bar in bars_miss)}
-
-        # Commentaire
+        
+        # Recovery the bar with the most ordered pints
         bar_most = Bar.objects.annotate(total_order=Count('orders__orderItems')).order_by('-total_order').first()
         response_most = {'name': 'most_pints',
                          'description': 'Liste le comptoir avec le plus de pintes commandées.',
                          'bars': [bar_most.pk]}
 
-        # Réponse
+        # Creation of the response
         response.append(response_all)
         response.append(response_miss)
         response.append(response_most)
@@ -142,7 +182,7 @@ class RankList(generics.ListAPIView):
         return response
 
 
-
+# A supprimer
 class OrderItemList(generics.ListAPIView):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
