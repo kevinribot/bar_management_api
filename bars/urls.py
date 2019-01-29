@@ -1,5 +1,4 @@
-import bars.receivers
-from .views import ReferenceList, BarList, StockList, MenuList, RankList,OrderList, OrderDetail, OrderCreate
+from .views import ReferenceList, BarList, StockList, MenuList, RankList, OrderList, OrderDetail, OrderCreate
 from django.urls import path
 
 # Création des urls accessibles

@@ -1,11 +1,24 @@
-import django_filters.rest_framework
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.serializers import IntegerField
+from rest_framework.filters import OrderingFilter, SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet, CharFilter
+from django.db.models import Sum, Count
 
 from .models import Reference, Bar, Stock, Order, OrderItem
 from .serializers import ReferenceSerializer, BarSerializer, StockSerializer, MenuSerializer,  OrderSerializer, OrderCreateSerializer, OrderItemSerializer, RankSerializer
-from django.db.models import Sum, Count
+from .permissions import OnlyUserAndStaffPermission
+
+
+class StockFilter(FilterSet):
+    def filter_category(queryset, name, value):
+        return queryset.filter(**{name: value})
+
+    ref = CharFilter(field_name='reference__ref', method=filter_category)
+    name = CharFilter(field_name='reference__name', method=filter_category)
+
+    class Meta:
+        model = Stock
+        fields = ['ref', 'name', 'stock']
 
 
 class ReferenceList(generics.ListCreateAPIView):
@@ -16,9 +29,15 @@ class ReferenceList(generics.ListCreateAPIView):
     post:
     Permet d'ajouter une référence.
     """
-    queryset = Reference.objects.all()
+
+    queryset = Reference.objects.filter()
     serializer_class = ReferenceSerializer
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+
+    permission_classes = (OnlyUserAndStaffPermission,)
+
+    filter_backends = (OrderingFilter, SearchFilter, DjangoFilterBackend,)
+    ordering_fields = ('ref', 'name')
+    filter_fields = ('ref', 'name')
 
 
 class BarList(generics.ListCreateAPIView):
@@ -32,6 +51,12 @@ class BarList(generics.ListCreateAPIView):
     queryset = Bar.objects.all()
     serializer_class = BarSerializer
 
+    permission_classes = (OnlyUserAndStaffPermission,)
+
+    filter_backends = (OrderingFilter, SearchFilter, DjangoFilterBackend,)
+    ordering_fields = ('id', 'name')
+    filter_fields = ('id', 'name')
+
 
 class StockList(generics.ListAPIView):
     """
@@ -39,6 +64,13 @@ class StockList(generics.ListAPIView):
     Retourne la liste des stocks.
     """
     serializer_class = StockSerializer
+
+    permission_classes = (OnlyUserAndStaffPermission,)
+
+    filter_backends = (OrderingFilter, SearchFilter, DjangoFilterBackend,)
+    filter_class = StockFilter
+    filter_fields = ('ref', 'name', 'stock')
+    ordering_fields = ('reference__ef', 'reference__name', 'reference__description', 'stock')
 
     def get_queryset(self):
         return Stock.objects.filter(bar=self.kwargs['bar'])
