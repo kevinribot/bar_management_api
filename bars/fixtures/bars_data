@@ -1,0 +1,15 @@
+[
+  {
+    "model": "bars.bar",
+    "pk": 1,
+    "fields": {
+      "name": "1er comptoir"
+    }
+  },
+  {
+    "model": "bars.bar",
+    "pk": 2,
+    "fields": {
+      "name": "2ème comptoir"
+    }
+]
