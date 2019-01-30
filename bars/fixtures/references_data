@@ -1,0 +1,27 @@
+[
+  {
+    "model": "bars.reference",
+    "pk": 1,
+    "fields": {
+      "ref": "leffeblonde",
+      "name": "Leffe blonde",
+      "description": "Une bière blonde d'abbaye brassée depuis 1240 et que l'on ne présente plus !"
+    }
+  },
+  {
+    "model": "bars.reference",
+    "pk": 2,
+    "fields": {
+      "ref": "brewdogipa",
+      "name": "La Punk IPA est une bière écossaise s'inspirant des tendances américaines en matière de brassage et du choix des houblons.",
+      "description": "2ème comptoir"
+    },
+  {
+    "model": "bars.reference",
+    "pk": 3,
+    "fields": {
+      "ref": "fullerindiapale",
+      "name": "Fuller's India Pale Ale",
+      "description": "Brassée pour l'export, la Fuller's India Pale Ale est la vitrine du savoir faire bien « british » de cette brasserie historique."
+    }
+]
