@@ -63,6 +63,26 @@ class StockList(generics.ListAPIView):
     def get_queryset(self):
         return Stock.objects.filter(bar=self.kwargs['bar'])
 
+##############        Nouvelle vue à tester        ##############
+#class MenuList(generics.ListAPIView):
+#    """
+#    get:
+#    Retourne la liste des stocks pour chaque référence.
+#    Si le comptoir est précisé alors la liste ce limitera à celui-ci.
+#    """
+#    queryset = Reference.objects.all()
+#    serializer_class = MenuSerializer
+#
+#    def get_queryset(self):
+#        if 'bar' in self.kwargs:
+#            return Reference.objects.filter(stocks__bar__pk=self.kwargs['bar']).annotate(
+#                total_stock=Sum('stocks__stock')
+#            )
+#        else:
+#            return Reference.objects.annotate(
+#                total_stock=Sum('stocks__stock')
+#            )
+
 
 class MenuList(generics.ListAPIView):
     """
@@ -72,21 +92,16 @@ class MenuList(generics.ListAPIView):
     """
     queryset = Reference.objects.all()
     serializer_class = MenuSerializer
+    lookup_field = "bar"
 
     filter_backends = (OrderingFilter, SearchFilter, DjangoFilterBackend,)
     filter_class = MenuFilter
     ordering_fields = ('ref', 'name', 'description')
 
     def get_queryset(self):
-        if 'bar' in self.kwargs:
-            return Reference.objects.filter(stocks__bar__pk=self.kwargs['bar']).annotate(
-                total_stock=Sum('stocks__stock')
-            )
-        else:
-            return Reference.objects.annotate(
-                total_stock=Sum('stocks__stock')
-            )
-
+        return Reference.objects.annotate(
+            total_stock=Sum('stocks__stock')
+        )
 
 class OrderList(generics.ListAPIView):
     """
@@ -95,6 +110,8 @@ class OrderList(generics.ListAPIView):
     """
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    
+    permission_classes = (OnlyUserAndStaffPermission,)
 
     permission_classes = (OnlyUserAndStaffPermission,)
 
@@ -106,8 +123,8 @@ class OrderCreate(generics.CreateAPIView):
     """
     serializer_class = OrderCreateSerializer
 
-    permission_classes = (OnlyClientPermission,)
-
+    permission_classes = (PostByClientAndGetByUserPermission,)
+    
     def create(self, validated_data, bar):
         dict_items = dict(self.request.data)
 
@@ -164,6 +181,22 @@ class OrderCreate(generics.CreateAPIView):
         return Response(response)
 
 
+# class OrderDetail(generics.RetrieveAPIView, generics.CreateAPIView):
+#     """
+#     get:
+#     Retourne la commande correspondant à l'identifiant précisé.
+#     """
+#     queryset = Order.objects.all()
+#     
+#     def get_serializer_class(self):
+#         if self.request.method == 'POST':
+#             serializer_class = OrderCreateSerializer
+#         elif self.request.method == 'GET':
+#             serializer_class = OrderSerializer
+# 
+#         return serializer_class
+
+
 class OrderDetail(generics.RetrieveAPIView):
     """
     get:
@@ -173,6 +206,8 @@ class OrderDetail(generics.RetrieveAPIView):
     serializer_class = OrderDetailSerializer
 
     permission_classes = (OnlyUserAndStaffPermission,)
+
+    permission_classes = (PostByClientAndGetByUserPermission,)
 
 
 class RankList(generics.ListAPIView):

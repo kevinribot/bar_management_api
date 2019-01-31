@@ -1,0 +1,60 @@
+[
+  {
+    "model": "bars.stock",
+    "pk": 1,
+    "fields": {
+      "bar": 1,
+      "reference": 1,
+      "stock": 10
+    }
+  },
+  {
+    "model": "bars.stock",
+    "pk": 2,
+    "fields": {
+      "bar": 1,
+      "reference": 2,
+      "stock": 5
+  },
+  {
+    "model": "bars.stock",
+    "pk": 3,
+    "fields": {
+      "bar": 1,
+      "reference": 3,
+      "stock": 0
+  },
+  {
+    "model": "bars.stock",
+    "pk": 4,
+    "fields": {
+      "bar": 2,
+      "reference": 1,
+      "stock": 15
+    }
+  },
+  {
+    "model": "bars.stock",
+    "pk": 5,
+    "fields": {
+      "bar": 2,
+      "reference": 2,
+      "stock": 12
+  },
+  {
+    "model": "bars.stock",
+    "pk": 6,
+    "fields": {
+      "bar": 2,
+      "reference": 3,
+      "stock": 12
+  },
+  {
+    "model": "bars.stock",
+    "pk": 7,
+    "fields": {
+      "bar": 3,
+      "reference": 4,
+      "stock": 3
+    },
+]
