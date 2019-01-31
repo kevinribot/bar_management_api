@@ -75,6 +75,26 @@ class StockList(generics.ListAPIView):
     def get_queryset(self):
         return Stock.objects.filter(bar=self.kwargs['bar'])
 
+##############        Nouvelle vue à tester        ##############
+#class MenuList(generics.ListAPIView):
+#    """
+#    get:
+#    Retourne la liste des stocks pour chaque référence.
+#    Si le comptoir est précisé alors la liste ce limitera à celui-ci.
+#    """
+#    queryset = Reference.objects.all()
+#    serializer_class = MenuSerializer
+#
+#    def get_queryset(self):
+#        if 'bar' in self.kwargs:
+#            return Reference.objects.filter(stocks__bar__pk=self.kwargs['bar']).annotate(
+#                total_stock=Sum('stocks__stock')
+#            )
+#        else:
+#            return Reference.objects.annotate(
+#                total_stock=Sum('stocks__stock')
+#            )
+
 
 class MenuList(generics.ListAPIView):
     """
@@ -84,17 +104,12 @@ class MenuList(generics.ListAPIView):
     """
     queryset = Reference.objects.all()
     serializer_class = MenuSerializer
+    lookup_field = "bar"
 
     def get_queryset(self):
-        if 'bar' in self.kwargs:
-            return Reference.objects.filter(stocks__bar__pk=self.kwargs['bar']).annotate(
-                total_stock=Sum('stocks__stock')
-            )
-        else:
-            return Reference.objects.annotate(
-                total_stock=Sum('stocks__stock')
-            )
-
+        return Reference.objects.annotate(
+            total_stock=Sum('stocks__stock')
+        )
 
 class OrderList(generics.ListAPIView):
     """
@@ -169,6 +184,22 @@ class OrderCreate(generics.CreateAPIView):
         return Response(response)
 
 
+# class OrderDetail(generics.RetrieveAPIView, generics.CreateAPIView):
+#     """
+#     get:
+#     Retourne la commande correspondant à l'identifiant précisé.
+#     """
+#     queryset = Order.objects.all()
+#     
+#     def get_serializer_class(self):
+#         if self.request.method == 'POST':
+#             serializer_class = OrderCreateSerializer
+#         elif self.request.method == 'GET':
+#             serializer_class = OrderSerializer
+# 
+#         return serializer_class
+
+
 class OrderDetail(generics.RetrieveAPIView):
     """
     get:
@@ -212,10 +243,4 @@ class RankList(generics.ListAPIView):
         response.append(response_most)
 
         return response
-
-
-# A supprimer
-class OrderItemList(generics.ListAPIView):
-    queryset = OrderItem.objects.all()
-    serializer_class = OrderItemSerializer
 
