@@ -13,3 +13,28 @@ J'ai utilisé la documentation [Django Rest Framework](https://www.django-rest-f
 
 ## Installation
 
+## Première éxécution
+
+```
+# Stop gitlab and remove its supervision process
+sudo gitlab-ctl uninstall
+
+# Debian/Ubuntu
+sudo dpkg -r gitlab-ce
+
+# Redhat/Centos
+sudo rpm -e gitlab-ce
+```
+
+## Test unitiares
+
+```
+# Stop gitlab and remove its supervision process
+sudo gitlab-ctl uninstall
+
+# Debian/Ubuntu
+sudo dpkg -r gitlab-ce
+
+# Redhat/Centos
+sudo rpm -e gitlab-ce
+```
