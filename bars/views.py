@@ -1,24 +1,13 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
-from django_filters.rest_framework import DjangoFilterBackend, FilterSet, CharFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Sum, Count
 
 from .models import Reference, Bar, Stock, Order, OrderItem
-from .serializers import ReferenceSerializer, BarSerializer, StockSerializer, MenuSerializer,  OrderSerializer, OrderCreateSerializer, OrderItemSerializer, RankSerializer
-from .permissions import OnlyUserAndStaffPermission
-
-
-class StockFilter(FilterSet):
-    def filter_category(queryset, name, value):
-        return queryset.filter(**{name: value})
-
-    ref = CharFilter(field_name='reference__ref', method=filter_category)
-    name = CharFilter(field_name='reference__name', method=filter_category)
-
-    class Meta:
-        model = Stock
-        fields = ['ref', 'name', 'stock']
+from .serializers import ReferenceSerializer, BarSerializer, StockSerializer, MenuSerializer,  OrderSerializer, OrderCreateSerializer, OrderDetailSerializer, OrderItemSerializer, RankSerializer
+from .permissions import OnlyUserAndStaffPermission, OnlyClientPermission
+from .filters import StockFilter, MenuFilter
 
 
 class ReferenceList(generics.ListCreateAPIView):
@@ -69,8 +58,7 @@ class StockList(generics.ListAPIView):
 
     filter_backends = (OrderingFilter, SearchFilter, DjangoFilterBackend,)
     filter_class = StockFilter
-    filter_fields = ('ref', 'name', 'stock')
-    ordering_fields = ('reference__ef', 'reference__name', 'reference__description', 'stock')
+    ordering_fields = ('reference__ref', 'reference__name', 'reference__description', 'stock')
 
     def get_queryset(self):
         return Stock.objects.filter(bar=self.kwargs['bar'])
@@ -84,6 +72,10 @@ class MenuList(generics.ListAPIView):
     """
     queryset = Reference.objects.all()
     serializer_class = MenuSerializer
+
+    filter_backends = (OrderingFilter, SearchFilter, DjangoFilterBackend,)
+    filter_class = MenuFilter
+    ordering_fields = ('ref', 'name', 'description')
 
     def get_queryset(self):
         if 'bar' in self.kwargs:
@@ -104,6 +96,8 @@ class OrderList(generics.ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
+    permission_classes = (OnlyUserAndStaffPermission,)
+
 
 class OrderCreate(generics.CreateAPIView):
     """
@@ -111,6 +105,8 @@ class OrderCreate(generics.CreateAPIView):
     Permet de passer une commande à un comptoir.
     """
     serializer_class = OrderCreateSerializer
+
+    permission_classes = (OnlyClientPermission,)
 
     def create(self, validated_data, bar):
         dict_items = dict(self.request.data)
@@ -129,8 +125,6 @@ class OrderCreate(generics.CreateAPIView):
             references = Reference.objects.filter(ref=itemRef.get("ref"))
             if len(references) == 1:
                 # La référence éxiste
-                cust_req_data_orderitem = {'reference': references[0].pk, 'order': order_serializer.data.get("id")}
-
                 # Vérification des stocks
                 stocks = Stock.objects.filter(reference=references[0].pk, bar=bar)
 
@@ -143,12 +137,13 @@ class OrderCreate(generics.CreateAPIView):
 
                         stocks[0].stock = stocks[0].stock - 1
 
-                        #Mise à jour des stocks en base de données
+                        # Mise à jour des stocks en base de données
                         stock_serializer = StockSerializer(stocks[0], data={'stock': stocks[0].stock}, partial=True)
                         if stock_serializer.is_valid():
                             stock_serializer.save()
 
-                        #Enregistrement des items de la commandes
+                        # Enregistrement des items de la commandes
+                        cust_req_data_orderitem = {'reference': references[0].pk, 'order': order_serializer.data.get("id")}
                         orderitem_serializer = OrderItemSerializer(data=cust_req_data_orderitem)
                         if orderitem_serializer.is_valid():
                             orderitem_serializer.save()
@@ -175,7 +170,9 @@ class OrderDetail(generics.RetrieveAPIView):
     Retourne la commande correspondant à l'identifiant précisé.
     """
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_class = OrderDetailSerializer
+
+    permission_classes = (OnlyUserAndStaffPermission,)
 
 
 class RankList(generics.ListAPIView):
@@ -184,6 +181,9 @@ class RankList(generics.ListAPIView):
     Retourne le classement des comptoires si la personne est authtifié.
     """
     serializer_class = RankSerializer
+
+    permission_classes = (OnlyUserAndStaffPermission,)
+    pagination_class = None
 
     def get_queryset(self):
         response = list()
@@ -212,10 +212,4 @@ class RankList(generics.ListAPIView):
         response.append(response_most)
 
         return response
-
-
-# A supprimer
-class OrderItemList(generics.ListAPIView):
-    queryset = OrderItem.objects.all()
-    serializer_class = OrderItemSerializer
 

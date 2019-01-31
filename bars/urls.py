@@ -9,8 +9,8 @@ urlpatterns = [
     path("api/bars/ranking/", RankList.as_view(), name="ranking_list"),
     path('api/menu/', MenuList.as_view(), name="menu_list"),
     path('api/menu/<int:bar>/', MenuList.as_view(), name="menu_detail"),
+    path('api/orders/<int:pk>/', OrderDetail.as_view(), name="order_detail"),
     path('api/order/<int:bar>/', OrderCreate.as_view(), name="order_create"),
     path('api/orders/', OrderList.as_view(), name="order_list"),
-    path('api/order/<int:pk>/', OrderDetail.as_view(), name="order_detail"),
 ]
 

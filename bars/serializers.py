@@ -56,9 +56,18 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    ref = serializers.CharField(source='reference.ref', read_only=True)
+    name = serializers.CharField(source='reference.name', read_only=True)
+    description = serializers.CharField(source='reference.description', read_only=True)
 
     class Meta:
         model = OrderItem
-        fields = '__all__'
+        fields = ('ref', 'name', 'description')
 
 
+class OrderDetailSerializer(serializers.ModelSerializer):
+    orderItems = OrderItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ('pk', 'created', 'bar', 'orderItems')
