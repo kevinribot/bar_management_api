@@ -6,7 +6,7 @@ from django.db.models import Sum, Count
 
 from .models import Reference, Bar, Stock, Order, OrderItem
 from .serializers import ReferenceSerializer, BarSerializer, StockSerializer, MenuSerializer,  OrderSerializer, OrderCreateSerializer, OrderItemSerializer, RankSerializer
-from .permissions import OnlyUserAndStaffPermission
+from .permissions import OnlyUserAndStaffPermission, PostByClientAndGetByUserPermission
 
 
 class StockFilter(FilterSet):
@@ -118,6 +118,8 @@ class OrderList(generics.ListAPIView):
     """
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    
+    permission_classes = (OnlyUserAndStaffPermission,)
 
 
 class OrderCreate(generics.CreateAPIView):
@@ -126,6 +128,8 @@ class OrderCreate(generics.CreateAPIView):
     Permet de passer une commande à un comptoir.
     """
     serializer_class = OrderCreateSerializer
+
+    permission_classes = (PostByClientAndGetByUserPermission,)
 
     def create(self, validated_data, bar):
         dict_items = dict(self.request.data)
@@ -208,6 +212,8 @@ class OrderDetail(generics.RetrieveAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
+    permission_classes = (PostByClientAndGetByUserPermission,)
+
 
 class RankList(generics.ListAPIView):
     """
@@ -215,6 +221,8 @@ class RankList(generics.ListAPIView):
     Retourne le classement des comptoires si la personne est authtifié.
     """
     serializer_class = RankSerializer
+
+    permission_classes = (OnlyUserAndStaffPermission,)
 
     def get_queryset(self):
         response = list()
