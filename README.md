@@ -2,37 +2,42 @@
 
 ## Description
 
-Il s'agit un webservice permettant de gérer un bar.
-Une personne anonyme peut :
-  - Passer une commande (**'/api/order/*{PK_COMPTOIR}*/'**)
-  - Afficher la liste des références disponible (**'/api/menu/'**)
+This program is a webservice allowing to manage a bar.
+An anonymous person can:
+  - To place an order (**'/api/order/*{PK_BAR}*/'**)
+  - Show the available list of references (**'/api/menu/'** or **'/api/menu/*{PK_BAR}*'**)
   
-Une personne authentifié peut :
-  - Afficher la liste des références (**'/api/references/'**)
-  - Afficher la liste des comptoirs (**'/api/bars/'**)
-  - Afficher les stocks  (**'/api/stock/*{PK_COMPTOIR}*/*'**)
-  - Afficher la liste des références disponible (**'/api/menu/'**)
-  - Afficher la liste des commandes effectuées (**'/api/order/*{PK}*'**)
-  - Afficher le contenu d'une commande (**'/api/order/*{PK}*/'**)
-  - Afficher des informations sur les comptoir (**'/api/bars/ranking/'**)
+An authenticated person can:
+  - Show the list of references (**'/api/references/'**)
+  - Show the list of bars (**'/api/bars/'**)
+  - Show the stock  (**'/api/stock/*{PK_BAR}*/*'**)
+  - Show the available list of references (**'/api/menu/'** or **'/api/menu/*{PK_BAR}*'**)
+  - Show the list of orders (**'/api/order/*{PK}*'**)
+  - Show the contents of an order (**'/api/order/*{PK}*/'**)
+  - Show informations of bars (**'/api/bars/ranking/'**)
 
-En plus, un administrateur peut :
-  - Gérer les réferences (**'/api/references/'**)
-  - Gérer les comptoirs (**'/api/bars/'**)
-  - Gérer les stocks (**'/api/bars/'**)
+An administrator can in more :
+  - Manage references (**'/api/references/'**)
+  - Manage bars (**'/api/bars/'**)
+  - Manage stocks (**'/api/bars/'**)
 
-## Technologie
+## Technology
 
 ![Python 3.1](https://img.shields.io/badge/dev-Python%203.1-green.svg)
 ![Django Rest Framework](https://img.shields.io/badge/framework-Django%20Rest%20Framework-yellowgreen.svg)
 
-## Mise en place
+## Installation 'Django Rest Framework'
 
-### Installation 'Django Rest Framework'
+```
+# Stop gitlab and remove its supervision process
+sudo gitlab-ctl uninstall
 
-J'ai utilisé la documentation [Django Rest Framework](https://www.django-rest-framework.org/) pour développeur ce programme.
+# Debian/Ubuntu
+sudo dpkg -r gitlab-ce
 
-## Installation
+# Redhat/Centos
+sudo rpm -e gitlab-ce
+```
 
 ## Première éxécution
 
@@ -47,7 +52,7 @@ sudo dpkg -r gitlab-ce
 sudo rpm -e gitlab-ce
 ```
 
-## Test unitiares
+## Unit Tests
 
 ```
 # Stop gitlab and remove its supervision process
