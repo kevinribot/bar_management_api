@@ -13,9 +13,10 @@
     "pk": 2,
     "fields": {
       "ref": "brewdogipa",
-      "name": "La Punk IPA est une bière écossaise s'inspirant des tendances américaines en matière de brassage et du choix des houblons.",
-      "description": "2ème comptoir"
-    },
+      "name": "Brewdog Punk IPA",
+      "description": "La Punk IPA est une bière écossaise s'inspirant des tendances américaines en matière de brassage et du choix des houblons."
+    }
+  },
   {
     "model": "bars.reference",
     "pk": 3,
@@ -24,4 +25,5 @@
       "name": "Fuller's India Pale Ale",
       "description": "Brassée pour l'export, la Fuller's India Pale Ale est la vitrine du savoir faire bien « british » de cette brasserie historique."
     }
+  }
 ]

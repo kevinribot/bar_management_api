@@ -1,5 +1,5 @@
-from .views import ReferenceList, BarList, StockList, MenuList, RankList, OrderList, OrderDetail, OrderCreate
-from django.urls import path, re_path
+from .views import ReferenceList, BarList, StockList, MenuList, RankList, OrderList, OrderDetail
+from django.urls import path
 
 # Création des urls accessibles
 urlpatterns = [
@@ -9,9 +9,7 @@ urlpatterns = [
     path("api/bars/ranking/", RankList.as_view(), name="ranking_list"),
     path('api/menu/', MenuList.as_view(), name="menu_list"),
     path('api/menu/<int:bar>/', MenuList.as_view(), name="menu_detail"),
-    path('api/orders/<int:pk>/', OrderDetail.as_view(), name="order_detail"),
-    path('api/order/<int:bar>/', OrderCreate.as_view(), name="order_create"),
-    re_path('api/order/<int:pk>/', OrderDetail.as_view(), name="order_detail"),
+    path('api/order/<int:pk>/', OrderDetail.as_view(), name="order_detail"),
     path('api/orders/', OrderList.as_view(), name="order_list"),
 ]
 

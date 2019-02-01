@@ -97,6 +97,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     'DEFAULT_PAGINATION_CLASS': 'bars.pagination.StandardResultsSetPagination',
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
 

@@ -14,6 +14,12 @@ class BarSerializer(serializers.ModelSerializer):
         fields = ('pk', 'name')
 
 
+class StockCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stock
+        fields = ('reference', 'stock', 'bar')
+
+
 class StockSerializer(serializers.ModelSerializer):
     ref = serializers.CharField(source='reference.ref', read_only=True)
     name = serializers.CharField(source='reference.name', read_only=True)
@@ -48,11 +54,16 @@ class OrderCreateSerializer(serializers.Serializer):
     items = serializers.ListField()
 
 
-class OrderSerializer(serializers.ModelSerializer):
+class OrderItemCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = '__all__'
 
+
+class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ('pk', 'bar')
 
 
 class OrderItemSerializer(serializers.ModelSerializer):

@@ -3,10 +3,26 @@
   <component name="ChangeListManager">
     <list default="true" id="aa5af312-eca7-40b9-8df5-9cd1a1072060" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bars/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/bars/permissions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bar_management_api/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/bar_management_api/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/fixtures/bars_data" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/fixtures/bars_post" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/fixtures/reference_post" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/fixtures/references_data" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/fixtures/stocks_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/bars/fixtures/stocks_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/fixtures/users_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/bars/fixtures/users_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/migrations/0002_auto_20190126_1501.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/migrations/0003_auto_20190127_2048.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/migrations/0004_auto_20190127_2124.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/migrations/0005_auto_20190128_1825.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/migrations/0006_auto_20190128_2046.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/migrations/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/bars/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/bars/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bars/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/bars/tests.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bars/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/bars/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bars/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/bars/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,29 +35,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bars/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="214">
+            <state relative-caret-position="561">
               <caret line="33" column="7" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="7" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bars/serializers.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="557">
-              <caret line="68" column="63" selection-start-line="68" selection-start-column="63" selection-end-line="68" selection-end-column="63" />
-              <folding>
-                <element signature="e#0#38#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bars/tests.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
             </state>
           </provider>
         </entry>
@@ -49,78 +44,34 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bars/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+            <state relative-caret-position="119">
+              <caret line="8" column="26" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="26" />
               <folding>
-                <element signature="e#0#109#0" expanded="true" />
+                <element signature="e#0#96#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bars/permissions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" column="26" selection-start-line="18" selection-start-column="6" selection-end-line="18" selection-end-column="26" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/bars/views.py">
+        <entry file="file://$PROJECT_DIR$/bars/tests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="177" selection-start-line="177" selection-end-line="177" />
+            <state relative-caret-position="476">
+              <caret line="37" column="54" selection-start-line="37" selection-start-column="54" selection-end-line="37" selection-end-column="54" />
               <folding>
-                <element signature="e#0#35#0" expanded="true" />
-                <element signature="e#969#1370#0" />
-                <element signature="e#1420#1801#0" />
-                <element signature="e#1847#2331#0" />
-                <element signature="e#2376#2938#0" />
-                <element signature="e#2783#2970#0" />
-                <element signature="e#3043#5909#0" />
-                <element signature="e#3165#3235#1" />
-                <element signature="e#5999#6213#0" />
+                <element signature="e#0#43#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/rest_framework/generics.py">
+        <entry file="file://$PROJECT_DIR$/bars/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="185" column="19" selection-start-line="185" selection-start-column="6" selection-end-line="185" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bars/filters.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bars/pagination.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bars/receivers.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="55" selection-start-line="10" selection-start-column="55" selection-end-line="10" selection-end-column="55" />
+            <state relative-caret-position="3825">
+              <caret line="234" column="36" selection-start-line="234" selection-start-column="36" selection-end-line="234" selection-end-column="36" />
               <folding>
-                <element signature="e#0#36#0" expanded="true" />
+                <element signature="e#0#35#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -141,10 +92,10 @@
       <find>RetrieveModelMixin</find>
       <find>OrderCreate</find>
       <find>RankList</find>
-      <find>OrderSerializer</find>
       <find>POST</find>
       <find>OrderingFilter</find>
       <find>OrderDetailSerializer</find>
+      <find>OrderSerializer</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -158,14 +109,20 @@
         <option value="$PROJECT_DIR$/bars/signals.py" />
         <option value="$PROJECT_DIR$/bars/receivers.py" />
         <option value="$PROJECT_DIR$/bars/models.py" />
-        <option value="$PROJECT_DIR$/bar_management_api/settings.py" />
         <option value="$PROJECT_DIR$/bar_management_api/urls.py" />
         <option value="$PROJECT_DIR$/bars/filters.py" />
         <option value="$PROJECT_DIR$/bars/ordering.py" />
         <option value="$PROJECT_DIR$/bars/permissions.py" />
-        <option value="$PROJECT_DIR$/bars/serializers.py" />
         <option value="$PROJECT_DIR$/bars/urls.py" />
+        <option value="$PROJECT_DIR$/bars/serializers.py" />
         <option value="$PROJECT_DIR$/bars/views.py" />
+        <option value="$PROJECT_DIR$/bars/__init__.py" />
+        <option value="$PROJECT_DIR$/bar_management_api/settings.py" />
+        <option value="$PROJECT_DIR$/bars/fixtures/references_data.json" />
+        <option value="$PROJECT_DIR$/bars/fixtures/stocks_data.json" />
+        <option value="$PROJECT_DIR$/bars/fixtures/bars_data.json" />
+        <option value="$PROJECT_DIR$/bars/fixtures/users_data.json" />
+        <option value="$PROJECT_DIR$/bars/tests.py" />
       </list>
     </option>
   </component>
@@ -198,6 +155,12 @@
               <item name="bar_management_api" type="b2602c69:ProjectViewProjectNode" />
               <item name="bar_management_api" type="462c0819:PsiDirectoryNode" />
               <item name="bars" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bar_management_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bar_management_api" type="462c0819:PsiDirectoryNode" />
+              <item name="bars" type="462c0819:PsiDirectoryNode" />
+              <item name="fixtures" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -251,9 +214,9 @@
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info active="true" anchor="bottom" id="Terminal" order="0" visible="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="2" />
+      <window_info anchor="bottom" id="Python Console" order="2" weight="0.32936078" />
       <window_info anchor="bottom" id="Message" order="3" />
-      <window_info anchor="bottom" id="Find" order="4" />
+      <window_info anchor="bottom" id="Find" order="4" weight="0.32936078" />
       <window_info anchor="bottom" id="Version Control" order="5" />
       <window_info anchor="bottom" id="Run" order="6" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
@@ -324,16 +287,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bars/fixtures/users_data.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bar_management_api/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django_filters/rest_framework/filterset.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -358,16 +311,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bars/receivers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="55" selection-start-line="10" selection-start-column="55" selection-end-line="10" selection-end-column="55" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/rest_framework/filters.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -378,26 +321,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bars/ordering.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="27" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bars/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="33" column="7" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/bars/ordering.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/rest_framework/generics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
+        <state relative-caret-position="3009">
           <caret line="185" column="19" selection-start-line="185" selection-start-column="6" selection-end-line="185" selection-end-column="19" />
         </state>
       </provider>
@@ -405,65 +332,149 @@
     <entry file="file://$PROJECT_DIR$/bars/filters.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
-          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bars/permissions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="26" selection-start-line="18" selection-start-column="6" selection-end-line="18" selection-end-column="26" />
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bars/pagination.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/bars/permissions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bars/receivers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="55" selection-start-line="10" selection-start-column="55" selection-end-line="10" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bars/fixtures/bars_data" />
+    <entry file="file://$PROJECT_DIR$/bars/fixtures/bars_post" />
+    <entry file="file://$PROJECT_DIR$/bars/fixtures/reference_post" />
+    <entry file="file://$PROJECT_DIR$/bars/fixtures/references_data" />
     <entry file="file://$PROJECT_DIR$/bars/serializers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="557">
-          <caret line="68" column="63" selection-start-line="68" selection-start-column="63" selection-end-line="68" selection-end-column="63" />
+        <state relative-caret-position="115">
+          <caret line="65" column="21" selection-start-line="65" selection-start-column="21" selection-end-line="65" selection-end-column="21" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bars/tests.py">
+    <entry file="file://$PROJECT_DIR$/bars/fixtures/bars_post.json" />
+    <entry file="file://$PROJECT_DIR$/bars/fixtures/reference_post.json" />
+    <entry file="file://$PROJECT_DIR$/bars/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bars/fixtures/references_data.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        <state relative-caret-position="459">
+          <caret line="27" column="2" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bar_management_api/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/bar_management_api-master/bar_management_api-master/bar_management_api-master/bars/fixtures/reference_post">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/bar_management_api-master/bar_management_api-master/bar_management_api-master/bars/fixtures/references_data">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bars/fixtures/stocks_data.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="901">
+          <caret line="53" column="5" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bars/fixtures/bars_data.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="2" selection-start-line="14" selection-start-column="2" selection-end-line="14" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/auth/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="70" column="20" lean-forward="true" selection-start-line="70" selection-start-column="20" selection-end-line="70" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/test/client.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1201">
+          <caret line="593" column="24" selection-start-line="593" selection-start-column="24" selection-end-line="593" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bars/fixtures/users_data.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="31" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bars/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="33" column="7" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bars/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+        <state relative-caret-position="119">
+          <caret line="8" column="26" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="26" />
           <folding>
-            <element signature="e#0#109#0" expanded="true" />
+            <element signature="e#0#96#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bars/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="177" selection-start-line="177" selection-end-line="177" />
+        <state relative-caret-position="3825">
+          <caret line="234" column="36" selection-start-line="234" selection-start-column="36" selection-end-line="234" selection-end-column="36" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
-            <element signature="e#969#1370#0" />
-            <element signature="e#1420#1801#0" />
-            <element signature="e#1847#2331#0" />
-            <element signature="e#2376#2938#0" />
-            <element signature="e#2783#2970#0" />
-            <element signature="e#3043#5909#0" />
-            <element signature="e#3165#3235#1" />
-            <element signature="e#5999#6213#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bars/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="37" column="54" selection-start-line="37" selection-start-column="54" selection-end-line="37" selection-end-column="54" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
           </folding>
         </state>
       </provider>

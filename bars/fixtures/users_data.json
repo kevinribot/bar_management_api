@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "username": "gerant",
-      "password": "password",
+      "password": "password1234",
       "is_superuser": true,
       "is_active": true,
       "is_staff": true
@@ -15,9 +15,10 @@
     "pk": 2,
     "fields": {
       "username": "barman",
-      "password": "password",
+      "password": "password1234",
       "is_superuser": false,
       "is_active": true,
       "is_staff": false
     }
+  }
 ]
