@@ -1,8 +1,13 @@
 from rest_framework import permissions
 
 
-# Création d'une permission qui permet seulement au utilisateur authentifié d'accéder à la données et les membres staff peuvent modifé ou ajouter les données
 class OnlyUserAndStaffPermission(permissions.BasePermission):
+    """
+    Anonymous users have no permissions.
+    Authenticated users can access to datas.
+    Staff users can access, edit and add datas.
+    """
+
     def has_permission(self, request, view):
         # Read permissions are allowed to any request,
         # so we'll always allow GET, HEAD or OPTIONS requests.
@@ -15,8 +20,12 @@ class OnlyUserAndStaffPermission(permissions.BasePermission):
         return False
 
 
-# Création d'une permission qui permet seulement au utilisateur authentifi
 class PostByClientAndGetByUserPermission(permissions.BasePermission):
+    """
+    Anonymous users can add datas.
+    Authenticated users can access to datas.
+    """
+
     def has_permission(self, request, view):
         # Read permissions are allowed to any request,
         # so we'll always allow GET, HEAD or OPTIONS requests.

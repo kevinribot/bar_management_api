@@ -52,13 +52,5 @@
       "reference": 3,
       "stock": 12
     }
-  },
-  {
-    "model": "bars.stock",
-    "pk": 7,
-    "fields": {
-      "bar": 3,
-      "reference": 4,
-      "stock": 3
-    },
+  }
 ]

@@ -25,42 +25,41 @@ An administrator can in more :
 
 ![Python 3.1](https://img.shields.io/badge/dev-Python%203.1-green.svg)
 ![Django Rest Framework](https://img.shields.io/badge/framework-Django%20Rest%20Framework-yellowgreen.svg)
+![PyCharm](https://img.shields.io/badge/IDE-PyCharm-yellow.svg)
 
 ## Installation 'Django Rest Framework'
 
 ```
-# Stop gitlab and remove its supervision process
-sudo gitlab-ctl uninstall
-
-# Debian/Ubuntu
-sudo dpkg -r gitlab-ce
-
-# Redhat/Centos
-sudo rpm -e gitlab-ce
+pip install djangorestframework
+pip install markdown       # Markdown support for the browsable API.
+pip install django-filter  # Filtering support
 ```
 
 ## Première éxécution
 
 ```
-# Stop gitlab and remove its supervision process
-sudo gitlab-ctl uninstall
+python manage.py makemigrations bars
+python manage.py migrate
+python manage.py runserver
+```
 
-# Debian/Ubuntu
-sudo dpkg -r gitlab-ce
+To initialize the database with test data you can use the following commands: 
 
-# Redhat/Centos
-sudo rpm -e gitlab-ce
+```
+python manage.py loaddata users_data.json
+python manage.py loaddata references_data.json
+python manage.py loaddata bars_data.json
+python manage.py loaddata stocks_data.json
 ```
 
 ## Unit Tests
 
+To run all unit tests you can use the following command:
 ```
-# Stop gitlab and remove its supervision process
-sudo gitlab-ctl uninstall
+python manage.py test
+```
 
-# Debian/Ubuntu
-sudo dpkg -r gitlab-ce
-
-# Redhat/Centos
-sudo rpm -e gitlab-ce
+You can run them one by one:
+```
+python manage.py test bars.tests.%ClassName%.%MethodName%
 ```

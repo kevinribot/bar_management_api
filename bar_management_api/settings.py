@@ -101,7 +101,7 @@ REST_FRAMEWORK = {
 }
 
 
-# Ajout des fixture
+# Adding fixture
 FIXTURE_DIRS = (
    os.path.join(BASE_DIR, 'bars/fixtures/'),
 )

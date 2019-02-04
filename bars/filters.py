@@ -1,9 +1,13 @@
 from django_filters.rest_framework import FilterSet, CharFilter, BooleanFilter
 
-from .models import Reference,  Stock
+from .models import Reference, Stock
 
 
 class StockFilter(FilterSet):
+    """
+    Filter of the view: 'Stock'
+    """
+
     ref = CharFilter(field_name='reference__ref')
     name = CharFilter(field_name='reference__name')
 
@@ -13,11 +17,16 @@ class StockFilter(FilterSet):
 
 
 class MenuFilter(FilterSet):
-    def filter_available(queryset, name, value):
+    """
+    Filter of the view: 'Menu'
+    'is_available' : Returns references in stock.
+    """
+
+    def filter_available(self, name, value):
         if value:
-            return queryset.filter(**{name + '__gt': 0})
+            return self.filter(**{name + '__gt': 0})
         else:
-            return queryset.filter(**{name: 0})
+            return self.filter(**{name: 0})
 
     is_available = BooleanFilter(field_name='total_stock', method=filter_available)
 

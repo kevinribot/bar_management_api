@@ -1,7 +1,7 @@
 from .views import ReferenceList, BarList, StockList, MenuList, RankList, OrderList, OrderDetail
 from django.urls import path
 
-# Création des urls accessibles
+
 urlpatterns = [
     path("api/references/", ReferenceList.as_view(), name="references_list"),
     path("api/bars/", BarList.as_view(), name="bars_list"),
