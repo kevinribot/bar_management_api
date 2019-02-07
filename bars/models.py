@@ -11,7 +11,10 @@ class Reference(models.Model):
     description = models.CharField(max_length=150)
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.ref)
+
+    class Meta:
+        unique_together = ('ref', )
 
 
 class Bar(models.Model):
@@ -22,7 +25,7 @@ class Bar(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.name)
 
 
 class Stock(models.Model):
@@ -37,6 +40,9 @@ class Stock(models.Model):
 
     def __str__(self):
         return self.bar.name + " - " + self.reference.ref + " (" + self.stock + ")"
+
+    class Meta:
+        unique_together = ('bar', 'reference')
 
 
 # Model of data - Order.

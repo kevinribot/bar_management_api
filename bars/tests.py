@@ -305,7 +305,7 @@ class StockTests(APITestCase):
         """
 
         self.data_post = {
-            "reference": 3,
+            "reference": "fullerindiapale",
             "stock": 15
         }
 
@@ -442,7 +442,7 @@ class StockTests(APITestCase):
         self.assertEqual(json_response['count'], Stock.objects.filter(bar=self.default_bar).count())
 
         stocks_before_post = [result['stock'] for result in json_response['results'] if
-                              result['ref'] == Stock.objects.filter(reference=self.data_post['reference'],
+                              result['ref'] == Stock.objects.filter(reference__ref=self.data_post['reference'],
                                                                     bar=self.default_bar).first().reference.ref]
         self.assertEqual(len(stocks_before_post), 1)
         self.assertEqual(stocks_before_post[0], 0)
@@ -459,7 +459,7 @@ class StockTests(APITestCase):
         self.assertEqual(json_response['count'], Stock.objects.filter(bar=self.default_bar).count())
 
         stocks_after_post = [result['stock'] for result in json_response['results'] if
-                             result['ref'] == Stock.objects.filter(reference=self.data_post['reference'],
+                             result['ref'] == Stock.objects.filter(reference__ref=self.data_post['reference'],
                                                                    bar=self.default_bar).first().reference.ref]
         self.assertEqual(len(stocks_after_post), 1)
         self.assertEqual(stocks_after_post[0], self.data_post['stock'])

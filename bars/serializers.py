@@ -23,20 +23,12 @@ class BarSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class StockCreateSerializer(serializers.ModelSerializer):
-    """
-    Serializer to create a model object 'Stock'.
-    """
-
-    class Meta:
-        model = Stock
-        fields = ('reference', 'stock', 'bar')
-
-
 class StockSerializer(serializers.ModelSerializer):
     """
     Serializer of the model 'Stock'.
     """
+
+    reference = serializers.SlugRelatedField(slug_field="pk", write_only=True, queryset=Reference.objects.all())
 
     ref = serializers.CharField(source='reference.ref', read_only=True)
     name = serializers.CharField(source='reference.name', read_only=True)
@@ -44,7 +36,7 @@ class StockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stock
-        fields = ('ref', 'name', 'description', 'stock')
+        fields = ('reference', 'ref', 'name', 'description', 'stock')
 
 
 class MenuSerializer(serializers.ModelSerializer):
@@ -76,38 +68,11 @@ class RankSerializer(serializers.Serializer):
     bars = serializers.ListField(read_only=True)
 
 
-class OrderCreateSerializer(serializers.Serializer):
-    """
-    Serializer to create an object 'Order'.
-    """
-
-    items = serializers.ListField()
-
-
-class OrderItemCreateSerializer(serializers.ModelSerializer):
-    """
-    Serializer to create a model object 'OrderItem'.
-    """
-
-    class Meta:
-        model = OrderItem
-        fields = '__all__'
-
-
-class OrderSerializer(serializers.ModelSerializer):
-    """
-    Serializer of the model 'Order' without details of ordered references.
-    """
-
-    class Meta:
-        model = Order
-        fields = ('pk', 'bar')
-
-
 class OrderItemSerializer(serializers.ModelSerializer):
     """
     Serializer of the model 'OrderItem'.
     """
+    items = serializers.ListField(write_only=True)
 
     ref = serializers.CharField(source='reference.ref', read_only=True)
     name = serializers.CharField(source='reference.name', read_only=True)
@@ -115,14 +80,13 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
-        fields = ('ref', 'name', 'description')
+        fields = ('items', 'ref', 'name', 'description')
 
 
-class OrderDetailSerializer(serializers.ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     """
-    Serializer of the model 'Order' with details of ordered references.
+    Serializer of the model 'Order' without details of ordered references.
     """
-
     orderItems = OrderItemSerializer(many=True, read_only=True)
 
     class Meta:

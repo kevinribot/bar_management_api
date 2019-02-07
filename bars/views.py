@@ -1,11 +1,11 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.permissions import SAFE_METHODS
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Sum, Count
 
-from .serializers import *
+from .serializers import ReferenceSerializer, BarSerializer, StockSerializer, MenuSerializer, OrderSerializer, OrderItemSerializer, RankSerializer
+from .models import Reference, Bar, Stock, Order
 from .permissions import OnlyUserAndStaffPermission, PostByClientAndGetByUserPermission
 from .filters import StockFilter, MenuFilter
 
@@ -56,61 +56,18 @@ class StockList(generics.ListCreateAPIView):
     Create or update stock
     """
     permission_classes = (OnlyUserAndStaffPermission,)
+    serializer_class = StockSerializer
 
     filter_backends = (OrderingFilter, SearchFilter, DjangoFilterBackend,)
     filter_class = StockFilter
     ordering_fields = ('reference__ref', 'reference__name', 'reference__description', 'stock')
 
-    def get_serializer_class(self):
-        serializer_class = None
-        if self.request.method in ('POST', 'DELETE', 'PUT', 'PATCH'):
-            serializer_class = StockCreateSerializer
-        elif self.request.method in SAFE_METHODS:
-            serializer_class = StockSerializer
-
-        return serializer_class
-
     # Returns the inventory list of the selected bar.
     def get_queryset(self):
         return Stock.objects.filter(bar=self.kwargs['bar'])
 
-    def create(self, validated_data, bar, **kwargs):
-        dict_items = dict(self.request.data)
-
-        # Recovery of the communicated data
-        if type(dict_items.get("reference")) is int:
-            reference = dict_items.get("reference")
-        else:
-            reference = int(dict_items.get("reference")[0])
-
-        if type(dict_items.get("stock")) is int:
-            new_stock = dict_items.get("stock")
-        else:
-            new_stock = int(dict_items.get("stock")[0])
-
-        # Verification of the existence of a 'Stock' object for reference and bar
-        stocks = Stock.objects.filter(reference__pk=reference, bar__pk=bar)
-
-        if len(stocks) == 1:
-            # Update of existing stock to database
-            stocks[0].stock = new_stock
-
-            stock_serializer = StockCreateSerializer(stocks[0], data={'stock': stocks[0].stock}, partial=True)
-            if stock_serializer.is_valid():
-                stock_serializer.save()
-        else:
-            # Added new stock to database
-            cust_req_data_orderitem = {
-                'reference': reference,
-                'bar': bar,
-                'stock': new_stock
-            }
-
-            stock_serializer = StockCreateSerializer(data=cust_req_data_orderitem)
-            if stock_serializer.is_valid():
-                stock_serializer.save()
-
-        return Response(stock_serializer.data, status=status.HTTP_201_CREATED)
+    def perform_create(self, serializer):
+        serializer.save(bar=Bar.objects.filter(pk=self.kwargs['bar']).first())
 
 
 class MenuList(generics.ListAPIView):
@@ -159,17 +116,9 @@ class OrderDetail(generics.RetrieveAPIView, generics.CreateAPIView):
     Makes an order at the specified bar.
     """
     queryset = Order.objects.all()
+    serializer_class = OrderSerializer
 
     permission_classes = (PostByClientAndGetByUserPermission,)
-
-    def get_serializer_class(self):
-        serializer_class = None
-        if self.request.method == 'POST':
-            serializer_class = OrderCreateSerializer
-        elif self.request.method == 'GET':
-            serializer_class = OrderDetailSerializer
-
-        return serializer_class
 
     def create(self, validated_data, pk, **kwargs):
         dict_items = dict(self.request.data)
@@ -186,35 +135,36 @@ class OrderDetail(generics.RetrieveAPIView, generics.CreateAPIView):
         list_items = list()
         for itemRef in list(dict_items.get("items")):
             # Recovery of reference in to database
-            references = Reference.objects.filter(ref=itemRef.get("ref"))
-            if len(references) == 1:
+            reference = Reference.objects.filter(ref=itemRef.get("ref")).first()
+
+            if reference is not None:
                 # The reference exists
                 cust_req_data_orderitem = {
-                    'reference': references[0].pk,
+                    'reference': reference.pk,
                     'order': order_serializer.data.get("pk")
                 }
 
                 # Check of stocks
-                stocks = Stock.objects.filter(reference=references[0].pk, bar=bar)
+                stock = Stock.objects.filter(reference=reference.pk, bar=bar).first()
 
-                if len(stocks) == 1:
-                    if stocks[0].stock > 0:
+                if len(stock) == 1:
+                    if stock.stock > 0:
                         # The reference is in stock
                         list_items.append({
-                            "ref": references[0].ref,
-                            "name": references[0].name,
-                            "description": references[0].description}
+                            "ref": reference.ref,
+                            "name": reference.name,
+                            "description": reference.description}
                         )
 
-                        stocks[0].stock = stocks[0].stock - 1
+                        stock.stock = stock.stock - 1
 
                         # Update of stocks to database
-                        stock_serializer = StockSerializer(stocks[0], data={'stock': stocks[0].stock}, partial=True)
+                        stock_serializer = StockSerializer(stock, data={'stock': stock.stock}, partial=True)
                         if stock_serializer.is_valid():
                             stock_serializer.save()
 
                         # Saving items from the order
-                        orderitem_serializer = OrderItemCreateSerializer(data=cust_req_data_orderitem)
+                        orderitem_serializer = OrderItemSerializer(data=cust_req_data_orderitem)
                         if orderitem_serializer.is_valid():
                             orderitem_serializer.save()
                     else:
