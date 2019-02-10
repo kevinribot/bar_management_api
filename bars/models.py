@@ -39,7 +39,7 @@ class Stock(models.Model):
     bar = models.ForeignKey(Bar, related_name='stocks', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.bar.name + " - " + self.reference.ref + " (" + self.stock + ")"
+        return self.bar.name + " - " + self.reference.ref + " (" + str(self.stock) + ")"
 
     class Meta:
         unique_together = ('bar', 'reference')

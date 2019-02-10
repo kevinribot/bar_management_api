@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Sum
 
 from .models import Reference, Bar, Stock, Order, OrderItem
 
@@ -28,7 +29,7 @@ class StockSerializer(serializers.ModelSerializer):
     Serializer of the model 'Stock'.
     """
 
-    reference = serializers.SlugRelatedField(slug_field="pk", write_only=True, queryset=Reference.objects.all())
+    reference = serializers.SlugRelatedField(slug_field="ref", write_only=True, queryset=Reference.objects.all())
 
     ref = serializers.CharField(source='reference.ref', read_only=True)
     name = serializers.CharField(source='reference.name', read_only=True)
@@ -52,10 +53,10 @@ class MenuSerializer(serializers.ModelSerializer):
 
     # Allows to know if a reference is in stock.
     def get_availability(self, obj):
-        if obj.total_stock > 0:
-            return "available"
-        else:
-            return "outofstock"
+        if self.context.get("bar") > 0:
+            return "available" if obj.stocks.get(bar=self.context.get("bar")).stock > 0 else "outofstock"
+
+        return "available" if obj.stocks.aggregate(Sum("stock"))["stock__sum"] > 0 else "outofstock"
 
 
 class RankSerializer(serializers.Serializer):
@@ -63,16 +64,15 @@ class RankSerializer(serializers.Serializer):
     Serializer allowing to know information about bars.
     """
 
-    name = serializers.CharField(read_only=True)
-    description = serializers.CharField(read_only=True)
-    bars = serializers.ListField(read_only=True)
+    name = serializers.CharField()
+    description = serializers.CharField()
+    bars = serializers.ListField()
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
     """
     Serializer of the model 'OrderItem'.
     """
-    items = serializers.ListField(write_only=True)
 
     ref = serializers.CharField(source='reference.ref', read_only=True)
     name = serializers.CharField(source='reference.name', read_only=True)
@@ -80,7 +80,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
-        fields = ('items', 'ref', 'name', 'description')
+        fields = ('ref', 'name', 'description', 'order', 'reference')
+        extra_kwargs = {
+            'order': {'write_only': True},
+            'reference': {'write_only': True},
+        }
 
 
 class OrderSerializer(serializers.ModelSerializer):

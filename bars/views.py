@@ -2,13 +2,12 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from django.db.models import Sum, Count
+from django.db.models import Count
 
 from .serializers import ReferenceSerializer, BarSerializer, StockSerializer, MenuSerializer, OrderSerializer, OrderItemSerializer, RankSerializer
 from .models import Reference, Bar, Stock, Order
 from .permissions import OnlyUserAndStaffPermission, PostByClientAndGetByUserPermission
 from .filters import StockFilter, MenuFilter
-
 
 class ReferenceList(generics.ListCreateAPIView):
     """
@@ -67,7 +66,10 @@ class StockList(generics.ListCreateAPIView):
         return Stock.objects.filter(bar=self.kwargs['bar'])
 
     def perform_create(self, serializer):
-        serializer.save(bar=Bar.objects.filter(pk=self.kwargs['bar']).first())
+        if not Stock.objects.filter(bar=self.kwargs['bar'], reference__ref=serializer.data["ref"]).exists():
+            serializer.save(bar=Bar.objects.filter(pk=self.kwargs['bar']).first())
+        else:
+            Stock.objects.filter(bar=self.kwargs['bar'], reference__ref=serializer.data["ref"]).update(stock=serializer.data["stock"])
 
 
 class MenuList(generics.ListAPIView):
@@ -77,23 +79,20 @@ class MenuList(generics.ListAPIView):
     If the bar is specified then the list will limit it to this one.
     """
 
-    queryset = Reference.objects.all()
     serializer_class = MenuSerializer
 
     filter_backends = (OrderingFilter, SearchFilter, DjangoFilterBackend,)
     filter_class = MenuFilter
     ordering_fields = ('ref', 'name', 'description')
 
-    # Add all the stocks of a reference to find out the total quantity.
+    def get_serializer_context(self):
+        return {'bar': self.kwargs['bar'] if 'bar' in self.kwargs else 0}
+
     def get_queryset(self):
         if 'bar' in self.kwargs:
-            return Reference.objects.filter(stocks__bar__pk=self.kwargs['bar']).annotate(
-                total_stock=Sum('stocks__stock')
-            )
+            return Reference.objects.filter(stocks__bar__pk=self.kwargs['bar'])
         else:
-            return Reference.objects.annotate(
-                total_stock=Sum('stocks__stock')
-            )
+            return Reference.objects.all()
 
 
 class OrderList(generics.ListAPIView):
@@ -132,11 +131,9 @@ class OrderDetail(generics.RetrieveAPIView, generics.CreateAPIView):
             order_serializer.save()
 
         # Recovery of the list of references
-        list_items = list()
         for itemRef in list(dict_items.get("items")):
             # Recovery of reference in to database
             reference = Reference.objects.filter(ref=itemRef.get("ref")).first()
-
             if reference is not None:
                 # The reference exists
                 cust_req_data_orderitem = {
@@ -146,53 +143,24 @@ class OrderDetail(generics.RetrieveAPIView, generics.CreateAPIView):
 
                 # Check of stocks
                 stock = Stock.objects.filter(reference=reference.pk, bar=bar).first()
-
-                if len(stock) == 1:
+                if stock is not None:
                     if stock.stock > 0:
-                        # The reference is in stock
-                        list_items.append({
-                            "ref": reference.ref,
-                            "name": reference.name,
-                            "description": reference.description}
-                        )
-
-                        stock.stock = stock.stock - 1
-
-                        # Update of stocks to database
-                        stock_serializer = StockSerializer(stock, data={'stock': stock.stock}, partial=True)
-                        if stock_serializer.is_valid():
-                            stock_serializer.save()
-
                         # Saving items from the order
                         orderitem_serializer = OrderItemSerializer(data=cust_req_data_orderitem)
                         if orderitem_serializer.is_valid():
                             orderitem_serializer.save()
                     else:
                         # The reference isn't in stock
-                        list_items.append({
-                            "ref": itemRef.get("ref"),
-                            "description": "La référence n'est pas en stock."
-                        })
+                        print("La référence '{0}' n'est pas en stock.".format(itemRef.get("ref"), ))
                 else:
                     # The reference is not available in this bar
-                    list_items.append({
-                        "ref": itemRef.get("ref"),
-                        "description": "La référence demandée n'est pas disponible dans ce comptoir."
-                    })
+                    print("La référence '{0}' n'est pas disponible dans ce comptoir.".format(itemRef.get("ref"), ))
             else:
                 # The reference does not exist
-                list_items.append({
-                    "ref": itemRef.get("ref"),
-                    "description": "La référence demandée n'existe pas."
-                })
+                print("La référence '{0}' n'existe pas.".format(itemRef.get("ref"), ))
 
-        # Creation of the response
-        response = {
-            "pk": order_serializer.data.get("pk"),
-            'items': list_items
-        }
-
-        return Response(response, status=status.HTTP_201_CREATED)
+        order_serializer = OrderSerializer(Order.objects.filter(pk=order_serializer.data.get("pk")).first())
+        return Response(order_serializer.data, status=status.HTTP_201_CREATED)
 
 
 class RankList(generics.ListAPIView):
@@ -201,16 +169,15 @@ class RankList(generics.ListAPIView):
     Returns informations about bars.
     """
     serializer_class = RankSerializer
+    queryset = None
 
     permission_classes = (OnlyUserAndStaffPermission,)
     pagination_class = None
 
     def get_queryset(self):
-        response = list()
-
         # Recovery of the list of bars that have all the references in stock
         bars_all = Bar.objects.exclude(stocks__stock=0).distinct()
-        response_all = {
+        data_all = {
             'name': 'all_stocks',
             'description': 'Liste des comptoirs qui ont toutes les références en stock.',
             'bars': (bar.pk for bar in bars_all)
@@ -218,7 +185,7 @@ class RankList(generics.ListAPIView):
 
         # Recovery of the list of bars that at least one exhausted references
         bars_miss = Bar.objects.filter(stocks__stock=0).distinct()
-        response_miss = {
+        data_miss = {
             'name': 'miss_at_least_one',
             'description': 'Liste des comptoirs qui ont au moins une références épuisée.',
             'bars': (bar.pk for bar in bars_miss)
@@ -226,16 +193,20 @@ class RankList(generics.ListAPIView):
 
         # Recovery the bar with the most ordered pints
         bar_most = Bar.objects.annotate(total_order=Count('orders__orderItems')).order_by('-total_order').first()
-        response_most = {
+        data_most = {
             'name': 'most_pints',
             'description': 'Liste le comptoir avec le plus de pintes commandées.',
             'bars': [bar_most.pk]
         }
 
         # Creation of the response
-        response.append(response_all)
-        response.append(response_miss)
-        response.append(response_most)
+        cust_data_rank = list()
+        cust_data_rank.append(data_all)
+        cust_data_rank.append(data_miss)
+        cust_data_rank.append(data_most)
 
-        return response
+        rank_serializer = RankSerializer(data=cust_data_rank, many=True)
+        rank_serializer.is_valid(raise_exception=True)
+
+        return rank_serializer.data
 

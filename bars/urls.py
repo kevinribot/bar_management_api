@@ -1,3 +1,5 @@
+import bars.receivers
+
 from .views import ReferenceList, BarList, StockList, MenuList, RankList, OrderList, OrderDetail
 from django.urls import path
 
