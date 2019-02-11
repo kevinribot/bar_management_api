@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.db.models import Sum
 
 from .models import Reference, Bar, Stock, Order, OrderItem
 
@@ -56,7 +55,7 @@ class MenuSerializer(serializers.ModelSerializer):
         if self.context.get("bar") > 0:
             return "available" if obj.stocks.get(bar=self.context.get("bar")).stock > 0 else "outofstock"
 
-        return "available" if obj.stocks.aggregate(Sum("stock"))["stock__sum"] > 0 else "outofstock"
+        return "available" if obj.stocks.filter(stock__gt=0).exists() else "outofstock"
 
 
 class RankSerializer(serializers.Serializer):
