@@ -6,15 +6,12 @@ class Reference(models.Model):
     Model of data - Reference
     """
 
-    ref = models.CharField(max_length=100)
+    ref = models.CharField(max_length=100, primary_key=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=150)
 
     def __str__(self):
         return str(self.ref)
-
-    class Meta:
-        unique_together = ('ref', )
 
 
 class Bar(models.Model):
