@@ -54,22 +54,18 @@ class StockList(generics.ListCreateAPIView):
     post:
     Create or update stock
     """
+	
+    queryset = Stock.objects.all().select_related('reference') 
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
+        return queryset.filter(bar=self.kwargs.get('bar', 0))
+	
     permission_classes = (OnlyUserAndStaffPermission,)
     serializer_class = StockSerializer
 
     filter_backends = (OrderingFilter, SearchFilter, DjangoFilterBackend,)
     filter_class = StockFilter
     ordering_fields = ('reference__ref', 'reference__name', 'reference__description', 'stock')
-
-    # Returns the inventory list of the selected bar.
-    def get_queryset(self):
-        return Stock.objects.filter(bar=self.kwargs['bar'])
-
-    def perform_create(self, serializer):
-        if not Stock.objects.filter(bar=self.kwargs['bar'], reference__ref=serializer.data["ref"]).exists():
-            serializer.save(bar=Bar.objects.filter(pk=self.kwargs['bar']).first())
-        else:
-            Stock.objects.filter(bar=self.kwargs['bar'], reference__ref=serializer.data["ref"]).update(stock=serializer.data["stock"])
 
 
 class MenuList(generics.ListAPIView):
@@ -85,14 +81,16 @@ class MenuList(generics.ListAPIView):
     filter_class = MenuFilter
     ordering_fields = ('ref', 'name', 'description')
 
-    def get_serializer_context(self):
-        return {'bar': self.kwargs['bar'] if 'bar' in self.kwargs else 0}
-
-    def get_queryset(self):
+    queryset = Reference.objects.all()
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
         if 'bar' in self.kwargs:
-            return Reference.objects.filter(stocks__bar__pk=self.kwargs['bar'])
+            return queryset.filter(stocks__bar__pk=self.kwargs.get('bar', 0))
         else:
-            return Reference.objects.all()
+            return queryset
+
+    def get_serializer_context(self):
+        return {'bar': self.kwargs.get('bar', 0)}
 
 
 class OrderList(generics.ListAPIView):
@@ -124,21 +122,17 @@ class OrderDetail(generics.RetrieveAPIView, generics.CreateAPIView):
         bar = pk
 
         # Recording of the order
-        cust_req_data_order = {'bar': bar}
-
-        order_serializer = OrderSerializer(data=cust_req_data_order)
-        if order_serializer.is_valid():
-            order_serializer.save()
+        order = Order.objects.create(bar=Bar.objects.filter(pk=bar).first())
 
         # Recovery of the list of references
-        for itemRef in list(dict_items.get("items")):
+        for itemRef in list(dict_items.get('items')):
             # Recovery of reference in to database
-            reference = Reference.objects.filter(ref=itemRef.get("ref")).first()
+            reference = Reference.objects.filter(ref=itemRef.get('ref')).first()
             if reference is not None:
                 # The reference exists
                 cust_req_data_orderitem = {
                     'reference': reference.pk,
-                    'order': order_serializer.data.get("pk")
+                    'order': order.pk
                 }
 
                 # Check of stocks
@@ -151,15 +145,15 @@ class OrderDetail(generics.RetrieveAPIView, generics.CreateAPIView):
                             orderitem_serializer.save()
                     else:
                         # The reference isn't in stock
-                        print("La référence '{0}' n'est pas en stock.".format(itemRef.get("ref"), ))
+                        print("La référence '{0}' n'est pas en stock.".format(itemRef.get('ref'), ))
                 else:
                     # The reference is not available in this bar
-                    print("La référence '{0}' n'est pas disponible dans ce comptoir.".format(itemRef.get("ref"), ))
+                    print("La référence '{0}' n'est pas disponible dans ce comptoir.".format(itemRef.get('ref'), ))
             else:
                 # The reference does not exist
-                print("La référence '{0}' n'existe pas.".format(itemRef.get("ref"), ))
+                print("La référence '{0}' n'existe pas.".format(itemRef.get('ref'), ))
 
-        order_serializer = OrderSerializer(Order.objects.filter(pk=order_serializer.data.get("pk")).first())
+        order_serializer = OrderSerializer(order)
         return Response(order_serializer.data, status=status.HTTP_201_CREATED)
 
 
